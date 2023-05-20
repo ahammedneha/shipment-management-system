@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Update Traking Details</h2>
+  <hr>
+  <p>Are you sure your order {{status}}?</p>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <th>Shipment No</th>
+        <td>{{ shipment_tracking.cnf_no }}</td>
+      </tr>
+      <tr>
+        <th>Order No </th>
+        <td>{{ shipment_tracking.order_no }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <form method="post">
+    {% csrf_token %}
+    {% if status and shipment_tracking.reached_overseas %}
+    <label>Unique Code</label>
+    <input type="text" id="code" name="code">
+    {% endif %}
+    {% if status and not shipment_tracking.ready %}
+    <div class="form-outline w-25 mb-4">
+        <textarea class="form-control" id="textAreaExample4" rows="3" name="carton"></textarea>
+        <label class="form-label" for="textAreaExample4">Carton Details</label>
+      </div>
+    {% endif %}
+    {% if status and shipment_tracking.ready and not shipment_tracking.shipped  %}
+    <div class="form-outline w-25 mb-4">
+        <textarea class="form-control" id="textAreaExample4" rows="3" name="container"></textarea>
+        <label class="form-label" for="textAreaExample4">Container Details</label>
+      </div>
+    {% endif %}
+    {% if status %}
+    <input type="submit" class="btn btn-primary" value="Update">
+    {% endif %}
+    <a href="{% url 'view_shipment' shipment_tracking.pk %}" class="btn btn-default">Cancel</a>
+  </form>
+  
+{% endblock %}
